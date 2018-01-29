@@ -346,20 +346,27 @@ if __name__ == '__main__':
     # print(evaluate_models_on_training(x,y,testmodels))
 
     # Part A.4
-
-    # Part One
     testdata = Climate('data.csv')
+    xval = [year for year in TRAINING_INTERVAL]
+    xval = pylab.array(xval)
+    # Part One  Test jan 10 in NYC
+    
     jan10NYC = []
     for year in TRAINING_INTERVAL:
         jan10NYC.append(testdata.get_daily_temp('NEW YORK',1,10,year))
     testmodel = generate_models(TRAINING_INTERVAL,jan10NYC,[1])
     print(testmodel)
-    xval = [year for year in TRAINING_INTERVAL]
-    xval = pylab.array(xval)
     evaluate_models_on_training(xval,jan10NYC,testmodel)
 
-    # Part 2
-
+    # Part 2 test average temp per year in NYC
+    yearly_avg_temp = []
+    for year in TRAINING_INTERVAL:
+        yearlyavgtemp = testdata.get_yearly_temp('NEW YORK', year)
+        yearly_avg_temp.append(sum(yearlyavgtemp)/len(yearlyavgtemp))
+    yearly_avg_temp = pylab.array(yearly_avg_temp)
+    testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
+    print(testmodel)
+    evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
     # Part B
     # TODO: replace this line with your code
 
