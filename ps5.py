@@ -350,8 +350,21 @@ def evaluate_models_on_testing(x, y, models):
     Returns:
         None
     """
-    # TODO
-    pass
+    pylab.figure(1)
+
+    for i in range(len(models)):
+        j=i+1 
+        pylab.subplot(len(models),1,j)
+        estYvals = pylab.polyval(models[i],x)
+        rmse_val = rmse(y,estYvals)
+        pylab.plot(x,y, 'bo', label = 'Data')
+        pylab.plot(x,estYvals,'r-', label = 'Predicted')
+        pylab.legend(loc = 'best')
+        pylab.title("Models test. RMSE = " + str(round(rmse_val,5)))
+        pylab.xlabel('Year')
+        pylab.ylabel('Celsius')
+    pylab.subplots_adjust(hspace=0.5)
+    pylab.show()
 
 if __name__ == '__main__':
 
@@ -397,7 +410,7 @@ if __name__ == '__main__':
     runningaverage = moving_average(yearly_avg_temp,5)
     testmodel_running_avg = generate_models(TRAINING_INTERVAL,runningaverage,[1])
     print("Running average test model: ", testmodel_running_avg)
-    evaluate_models_on_training(xval,runningaverage,testmodel_running_avg)
+    evaluate_models_on_testing(xval,runningaverage,testmodel_running_avg)
 
     # Part D.2
     # TODO: replace this line with your code
