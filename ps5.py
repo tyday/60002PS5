@@ -256,8 +256,16 @@ def gen_cities_avg(climate, multi_cities, years):
         this array corresponds to the average annual temperature over the given
         cities for a given year.
     """
-    # TODO
-    pass
+    combined_avg_temp = [] 
+    for year in years:
+        avgdailytemp = []
+        for city in multi_cities:
+            temp_tempdata = climate.get_yearly_temp(city,year)
+            avgdailytemp.append(sum(temp_tempdata)/len(temp_tempdata))
+        combined_avg_temp.append(sum(avgdailytemp)/len(avgdailytemp))
+
+    combined_avg_temp = pylab.array(combined_avg_temp)
+    return combined_avg_temp
 
 def moving_average(y, window_length):
     """
@@ -369,6 +377,10 @@ if __name__ == '__main__':
     evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
     # Part B
     # TODO: replace this line with your code
+    yearly_avg_temp = gen_cities_avg(testdata,CITIES,xval)
+    testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
+    print(testmodel)
+    evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
 
     # Part C
     # TODO: replace this line with your code
