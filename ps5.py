@@ -240,10 +240,7 @@ def evaluate_models_on_training(x, y, models):
     pylab.subplots_adjust(hspace=0.5)
     pylab.show()
 
-testmodels = (generate_models(pylab.array([1961, 1962, 1963]), pylab.array([-4.4, -5.5, -6.6]), [1, 2]))
-x = pylab.array([1961,1962,1963])
-y = pylab.array([-4.4,-5.5,-6.6])
-print(evaluate_models_on_training(x,y,testmodels))
+
 def gen_cities_avg(climate, multi_cities, years):
     """
     Compute the average annual temperature over multiple cities.
@@ -342,10 +339,26 @@ def evaluate_models_on_testing(x, y, models):
 
 if __name__ == '__main__':
 
-    pass 
+    # Part Ty tests
+    # testmodels = (generate_models(pylab.array([1961, 1962, 1963]), pylab.array([-4.4, -5.5, -6.6]), [1, 2]))
+    # x = pylab.array([1961,1962,1963])
+    # y = pylab.array([-4.4,-5.5,-6.6])
+    # print(evaluate_models_on_training(x,y,testmodels))
 
     # Part A.4
-    # TODO: replace this line with your code
+
+    # Part One
+    testdata = Climate('data.csv')
+    jan10NYC = []
+    for year in TRAINING_INTERVAL:
+        jan10NYC.append(testdata.get_daily_temp('NEW YORK',1,10,year))
+    testmodel = generate_models(TRAINING_INTERVAL,jan10NYC,[1])
+    print(testmodel)
+    xval = [year for year in TRAINING_INTERVAL]
+    xval = pylab.array(xval)
+    evaluate_models_on_training(xval,jan10NYC,testmodel)
+
+    # Part 2
 
     # Part B
     # TODO: replace this line with your code
