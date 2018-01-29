@@ -281,9 +281,16 @@ def moving_average(y, window_length):
         an 1-d pylab array with the same length as y storing moving average of
         y-coordinates of the N sample points
     """
-    # TODO
-    pass
-
+    returnlist = []
+    ycopy = pylab.array(y)
+    for i in range(1,len(y)+1):
+        if i < window_length:
+            runningavg = ycopy[:i].mean()
+        else:
+            runningavg = ycopy[i-window_length:i].mean()
+        returnlist.append(runningavg)
+    returnlist = pylab.array(returnlist)
+    return returnlist
 def rmse(y, estimated):
     """
     Calculate the root mean square error term.
@@ -357,33 +364,39 @@ if __name__ == '__main__':
     testdata = Climate('data.csv')
     xval = [year for year in TRAINING_INTERVAL]
     xval = pylab.array(xval)
-    # Part One  Test jan 10 in NYC
+    # # Part One  Test jan 10 in NYC
     
-    jan10NYC = []
-    for year in TRAINING_INTERVAL:
-        jan10NYC.append(testdata.get_daily_temp('NEW YORK',1,10,year))
-    testmodel = generate_models(TRAINING_INTERVAL,jan10NYC,[1])
-    print(testmodel)
-    evaluate_models_on_training(xval,jan10NYC,testmodel)
+    # jan10NYC = []
+    # for year in TRAINING_INTERVAL:
+    #     jan10NYC.append(testdata.get_daily_temp('NEW YORK',1,10,year))
+    # testmodel = generate_models(TRAINING_INTERVAL,jan10NYC,[1])
+    # print(testmodel)
+    # evaluate_models_on_training(xval,jan10NYC,testmodel)
 
-    # Part 2 test average temp per year in NYC
-    yearly_avg_temp = []
-    for year in TRAINING_INTERVAL:
-        yearlyavgtemp = testdata.get_yearly_temp('NEW YORK', year)
-        yearly_avg_temp.append(sum(yearlyavgtemp)/len(yearlyavgtemp))
-    yearly_avg_temp = pylab.array(yearly_avg_temp)
-    testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
-    print(testmodel)
-    evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
-    # Part B
-    # TODO: replace this line with your code
+    # # Part 2 test average temp per year in NYC
+    # yearly_avg_temp = []
+    # for year in TRAINING_INTERVAL:
+    #     yearlyavgtemp = testdata.get_yearly_temp('NEW YORK', year)
+    #     yearly_avg_temp.append(sum(yearlyavgtemp)/len(yearlyavgtemp))
+    # yearly_avg_temp = pylab.array(yearly_avg_temp)
+    # testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
+    # print(testmodel)
+    # evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
+    # # Part B
+    # # TODO: replace this line with your code
     yearly_avg_temp = gen_cities_avg(testdata,CITIES,xval)
     testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
     print(testmodel)
     evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
 
     # Part C
-    # TODO: replace this line with your code
+    # test moving average
+    # spam = pylab.array([10,20,30,40,50])
+    # print(moving_average(spam,3))
+    runningaverage = moving_average(yearly_avg_temp,5)
+    testmodel_running_avg = generate_models(TRAINING_INTERVAL,runningaverage,[1])
+    print("Running average test model: ", testmodel_running_avg)
+    evaluate_models_on_training(xval,runningaverage,testmodel_running_avg)
 
     # Part D.2
     # TODO: replace this line with your code
