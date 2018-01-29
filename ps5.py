@@ -164,7 +164,14 @@ def generate_models(x, y, degs):
         that minimizes the squared error of the fitting polynomial
     """
     # TODO
-    pass
+    polyfitlist = []
+    for deg in degs:
+        z = pylab.polyfit(x,y,deg)
+        polyfitlist.append(z)
+    return polyfitlist
+
+# print (generate_models(pylab.array([1961, 1962, 1963]), pylab.array([-4.4, -5.5, -6.6]), [1, 2]))
+    
 
 
 def r_squared(y, estimated):
