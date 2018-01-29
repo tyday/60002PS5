@@ -223,11 +223,11 @@ def evaluate_models_on_training(x, y, models):
     
     for i in range(len(models)):
         j=i+1
-        pylab.subplot(len(models),1,j)
+        pylab.subplot(2,2,j) #pylab.subplot(len(models),1,j)
         estYvals = pylab.polyval(models[i], x)
         error = r_squared(y, estYvals)
         pylab.plot(x, y, 'bo', label = 'Data')
-        pylab.plot(x, estYvals, 'r-')#, label = 'Fit of degree ' + str(models[i].size-1)\
+        pylab.plot(x, estYvals, 'r-', label = 'Model fit')#, label = 'Fit of degree ' + str(models[i].size-1)\
                     # + ', R2 = ' + str(round(error, 5)))
         pylab.legend(loc = 'best')
         if models[i].size-1 ==1:
@@ -354,13 +354,13 @@ def evaluate_models_on_testing(x, y, models):
 
     for i in range(len(models)):
         j=i+1 
-        pylab.subplot(len(models),1,j)
+        pylab.subplot(2,2,j) #pylab.subplot(len(models),1,j)
         estYvals = pylab.polyval(models[i],x)
         rmse_val = rmse(y,estYvals)
         pylab.plot(x,y, 'bo', label = 'Data')
         pylab.plot(x,estYvals,'r-', label = 'Predicted')
         pylab.legend(loc = 'best')
-        pylab.title("Models test. RMSE = " + str(round(rmse_val,5)))
+        pylab.title("Fit of degree " + str(models[i].size-1) + "\nRMSE = " + str(round(rmse_val,5)))
         pylab.xlabel('Year')
         pylab.ylabel('Celsius')
     pylab.subplots_adjust(hspace=0.5)
@@ -399,19 +399,23 @@ if __name__ == '__main__':
     # # Part B
     # # TODO: replace this line with your code
     yearly_avg_temp = gen_cities_avg(testdata,CITIES,xval)
-    testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
-    print(testmodel)
-    evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
+    # testmodel = generate_models(TRAINING_INTERVAL,yearly_avg_temp,[1])
+    # print(testmodel)
+    # evaluate_models_on_training(xval,yearly_avg_temp,testmodel)
 
     # Part C
     # test moving average
     # spam = pylab.array([10,20,30,40,50])
     # print(moving_average(spam,3))
     runningaverage = moving_average(yearly_avg_temp,5)
-    testmodel_running_avg = generate_models(TRAINING_INTERVAL,runningaverage,[1])
+    testmodel_running_avg = generate_models(TRAINING_INTERVAL,runningaverage,[1,2,20])
     print("Running average test model: ", testmodel_running_avg)
-    evaluate_models_on_testing(xval,runningaverage,testmodel_running_avg)
+    evaluate_models_on_training(xval,runningaverage,testmodel_running_avg)
 
+    xval_modern = [i for i in range(2010,2016)]
+    modern_yearly_avg_temp = gen_cities_avg(testdata,CITIES,xval_modern)
+    modern_running_avg = moving_average(modern_yearly_avg_temp,5)
+    evaluate_models_on_testing(xval_modern,modern_running_avg,testmodel_running_avg)
     # Part D.2
     # TODO: replace this line with your code
 
