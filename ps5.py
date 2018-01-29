@@ -170,7 +170,7 @@ def generate_models(x, y, degs):
         polyfitlist.append(z)
     return polyfitlist
 
-# print (generate_models(pylab.array([1961, 1962, 1963]), pylab.array([-4.4, -5.5, -6.6]), [1, 2]))
+
     
 
 
@@ -188,7 +188,9 @@ def r_squared(y, estimated):
         a float for the R-squared error term
     """
     # TODO
-    pass
+    error = ((estimated - y)**2).sum()
+    meanError = error/len(y)
+    return 1 - (meanError/pylab.var(y))
 
 def evaluate_models_on_training(x, y, models):
     """
@@ -216,9 +218,32 @@ def evaluate_models_on_training(x, y, models):
     Returns:
         None
     """
-    # TODO
-    pass
+    # pylab.plot(x, y, 'o', label = 'Data')
+    pylab.figure(1)
+    
+    for i in range(len(models)):
+        j=i+1
+        pylab.subplot(len(models),1,j)
+        estYvals = pylab.polyval(models[i], x)
+        error = r_squared(y, estYvals)
+        pylab.plot(x, y, 'bo', label = 'Data')
+        pylab.plot(x, estYvals, 'r-')#, label = 'Fit of degree ' + str(models[i].size-1)\
+                    # + ', R2 = ' + str(round(error, 5)))
+        pylab.legend(loc = 'best')
+        if models[i].size-1 ==1:
+            pylab.title('Fit of degree ' + str(models[i].size-1)+ ', R2 = ' +str(round(error,5)) + '\nRegression Slope = '\
+                        + str(round(se_over_slope(x,y,estYvals,models[i]),5)))
+        else:
+            pylab.title('Fit of degree ' + str(models[i].size-1)+ ', R2 = ' +str(round(error,5)))
+        pylab.xlabel('Year')
+        pylab.ylabel('Celsius')
+    pylab.subplots_adjust(hspace=0.5)
+    pylab.show()
 
+testmodels = (generate_models(pylab.array([1961, 1962, 1963]), pylab.array([-4.4, -5.5, -6.6]), [1, 2]))
+x = pylab.array([1961,1962,1963])
+y = pylab.array([-4.4,-5.5,-6.6])
+print(evaluate_models_on_training(x,y,testmodels))
 def gen_cities_avg(climate, multi_cities, years):
     """
     Compute the average annual temperature over multiple cities.
