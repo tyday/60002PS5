@@ -323,8 +323,21 @@ def gen_std_devs(climate, multi_cities, years):
         this array corresponds to the standard deviation of the average annual 
         city temperatures for the given cities in a given year.
     """
-    # TODO
-    pass
+    combined_avg_temp = []
+    for year in years:
+        avgdailytemp = []
+        for city in multi_cities:
+            temp_tempdata = climate.get_yearly_temp(city,year)
+            if avgdailytemp == []:
+                avgdailytemp = temp_tempdata
+            else:
+                avgdailytemp += temp_tempdata #= pylab.concatenate((avgdailytemp,temp_tempdata))
+        
+        avgdailytemp = avgdailytemp / len(multi_cities)
+        combined_avg_temp.append(pylab.std(avgdailytemp))
+    return combined_avg_temp
+    
+
 
 def evaluate_models_on_testing(x, y, models):
     """
@@ -412,12 +425,17 @@ if __name__ == '__main__':
     print("Running average test model: ", testmodel_running_avg)
     evaluate_models_on_training(xval,runningaverage,testmodel_running_avg)
 
+   
+    # Part D.2
     xval_modern = [i for i in range(2010,2016)]
     modern_yearly_avg_temp = gen_cities_avg(testdata,CITIES,xval_modern)
     modern_running_avg = moving_average(modern_yearly_avg_temp,5)
     evaluate_models_on_testing(xval_modern,modern_running_avg,testmodel_running_avg)
-    # Part D.2
-    # TODO: replace this line with your code
 
     # Part E
-    # TODO: replace this line with your code
+    list_StD = gen_std_devs(testdata,CITIES,xval)
+    moving_5yr_StD = moving_average(list_StD, 10)
+    print(moving_5yr_StD)
+    test_stD_model = generate_models(xval,moving_5yr_StD,[1,2,3,4])
+    evaluate_models_on_training(xval,moving_5yr_StD,test_stD_model)
+
